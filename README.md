@@ -23,7 +23,20 @@ A single-header C library implementing arbitrary precision complex numbers with 
 
 ## Quick Start
 
+First, ensure you have the required dependencies available in your include path:
+- `dynamic_int.h`
+- `dynamic_fraction.h`
+
+Then include and use the library:
+
 ```c
+// Include dependencies first (with their implementations if needed)
+#define DI_IMPLEMENTATION  // if using dynamic_int.h directly
+#include "dynamic_int.h"
+#define DF_IMPLEMENTATION  // if using dynamic_fraction.h directly
+#include "dynamic_fraction.h"
+
+// Now include dynamic_complex.h
 #define DC_IMPLEMENTATION
 #include "dynamic_complex.h"
 
@@ -146,10 +159,39 @@ dc_complex_frac dc_double_to_frac(dc_complex_double c, int64_t max_denominator);
 
 ## Dependencies
 
+### Required Dependencies
+You must have these header files available in your include path:
+
 - **dynamic_int.h**: Required for integer complex arithmetic
+  - Download from: https://github.com/edadma/dynamic_int.h
 - **dynamic_fraction.h**: Required for rational complex arithmetic
-- **C99 complex.h**: Used for floating-point transcendental functions
-- **Unity**: Testing framework (included in devDeps/)
+  - Download from: https://github.com/edadma/dynamic_fraction.h
+- **C99 complex.h**: Used for floating-point transcendental functions (standard library)
+
+### Development Dependencies (optional)
+- **Unity**: Testing framework (included in devDeps/ for development)
+
+### Dependency Setup
+
+You have several options for managing dependencies:
+
+1. **Manual Download**: Download the header files and place them in your include path
+2. **Git Submodules**: Add dependencies as git submodules
+3. **Package Manager**: Use a C package manager like CPM or Conan
+4. **System Install**: Install headers system-wide
+5. **CMake Include Directories**: Add dependency paths to your CMakeLists.txt
+
+Example with git submodules:
+```bash
+git submodule add https://github.com/edadma/dynamic_int.h.git deps/dynamic_int
+git submodule add https://github.com/edadma/dynamic_fraction.h.git deps/dynamic_fraction
+```
+
+Example CMakeLists.txt setup:
+```cmake
+include_directories(deps/dynamic_int.h)
+include_directories(deps/dynamic_fraction.h)
+```
 
 ## Building
 

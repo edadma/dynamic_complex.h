@@ -943,8 +943,8 @@ WARN_LOGFILE           = doxygen_warnings.log
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = . \
-                         devDeps/dynamic_int.h \
+INPUT                  = dynamic_complex.h \
+                         README.md \
                          LICENSE
 
 # This tag can be used to specify the character encoding of the source files
@@ -1066,7 +1066,10 @@ EXCLUDE_PATTERNS       = */test* \
                          */Tests* \
                          */.git/* \
                          */build/* \
-                         */cmake-build-*
+                         */cmake-build-* \
+                         */devDeps/* \
+                         dynamic_int.h \
+                         dynamic_fraction.h
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
@@ -1074,20 +1077,12 @@ EXCLUDE_PATTERNS       = */test* \
 # wildcard * is used, a substring. Examples: ANamespace, AClass,
 # ANamespace::AClass, ANamespace::*Test
 
-EXCLUDE_SYMBOLS        = di_int_internal \
-                         DI_MALLOC \
-                         DI_REALLOC \
-                         DI_FREE \
-                         DI_ASSERT \
-                         DI_LIMB_BITS \
-                         DI_DEF \
-                         DI_IMPL \
-                         DI_LIMB_MAX \
-                         DF_MALLOC \
-                         DF_FREE \
-                         DF_ASSERT \
-                         DF_DEF \
-                         DF_IMPL
+EXCLUDE_SYMBOLS        = di_* \
+                         df_* \
+                         DI_* \
+                         DF_* \
+                         di_int_internal \
+                         df_frac_internal
 
 # The EXAMPLE_PATH tag can be used to specify one or more files or directories
 # that contain example code fragments that are included (see the \include

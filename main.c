@@ -1,6 +1,12 @@
 #define UNITY_INCLUDE_DOUBLE
 #include "devDeps/unity/unity.h"
 
+// Include dependencies with implementations
+#define DI_IMPLEMENTATION
+#include "dynamic_int.h"
+#define DF_IMPLEMENTATION
+#include "dynamic_fraction.h"
+
 #define DC_IMPLEMENTATION
 #include "dynamic_complex.h"
 

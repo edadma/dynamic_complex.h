@@ -114,14 +114,9 @@
 #define DC_DEF /* nothing - default linkage */
 #endif
 
-/* Include dependencies - these must be included with their implementations */
-#define DI_IMPLEMENTATION
-#define DI_STATIC
-#include "devDeps/dynamic_int.h"
-
-#define DF_IMPLEMENTATION
-#define DF_STATIC
-#include "devDeps/dynamic_fraction.h"
+/* Include dependencies - user must ensure these are available */
+#include "dynamic_int.h"
+#include "dynamic_fraction.h"
 
 // ============================================================================
 // TYPE DEFINITIONS
