@@ -1,7 +1,7 @@
 /**
  * @file dynamic_complex.h
  * @brief Reference-counted arbitrary precision complex number library
- * @version 1.0.0
+ * @version 0.1.0
  * @date September 2025
  *
  * Single header library for arbitrary precision complex numbers with reference counting.
@@ -185,38 +185,204 @@ struct dc_complex_double_internal {
  */
 
 /* Creation */
+
+/**
+ * @brief Create a Gaussian integer from int64_t real and imaginary parts
+ * @param real The real part
+ * @param imag The imaginary part
+ * @return New Gaussian integer complex number (must be released)
+ * @note Result has reference count of 1
+ */
 DC_DEC dc_complex_int dc_int_from_ints(int64_t real, int64_t imag);
+
+/**
+ * @brief Create a Gaussian integer from dynamic integer components
+ * @param real The real part (must not be NULL)
+ * @param imag The imaginary part (must not be NULL)
+ * @return New Gaussian integer complex number (must be released)
+ * @note Result has reference count of 1
+ * @note Input integers are retained
+ */
 DC_DEC dc_complex_int dc_int_from_di(di_int real, di_int imag);
+
+/**
+ * @brief Get the Gaussian integer zero (0 + 0i)
+ * @return Singleton zero complex number
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_int dc_int_zero(void);
+
+/**
+ * @brief Get the Gaussian integer one (1 + 0i)
+ * @return Singleton one complex number
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_int dc_int_one(void);
+
+/**
+ * @brief Get the Gaussian integer i (0 + 1i)
+ * @return Singleton imaginary unit
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_int dc_int_i(void);
+
+/**
+ * @brief Get the Gaussian integer -1 (-1 + 0i)
+ * @return Singleton negative one complex number
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_int dc_int_neg_one(void);
+
+/**
+ * @brief Get the Gaussian integer -i (0 - 1i)
+ * @return Singleton negative imaginary unit
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_int dc_int_neg_i(void);
 
 /* Memory management */
+
+/**
+ * @brief Increment reference count and return the same object
+ * @param c The complex number to retain (must not be NULL)
+ * @return The same object passed in
+ * @note Increases reference count by 1
+ */
 DC_DEC dc_complex_int dc_int_retain(dc_complex_int c);
+
+/**
+ * @brief Decrement reference count and possibly free memory
+ * @param c Pointer to complex number pointer (gracefully handles NULL)
+ * @note Sets *c to NULL after release
+ * @note Only frees memory when reference count reaches 0
+ * @note Singletons are never freed
+ */
 DC_DEC void dc_int_release(dc_complex_int* c);
+
+/**
+ * @brief Create a new copy with reference count 1
+ * @param c The complex number to copy (must not be NULL)
+ * @return New complex number with same value
+ * @note Result has reference count of 1
+ */
 DC_DEC dc_complex_int dc_int_copy(dc_complex_int c);
 
 /* Arithmetic */
+
+/**
+ * @brief Add two Gaussian integers
+ * @param a First operand (must not be NULL)
+ * @param b Second operand (must not be NULL)
+ * @return New complex number a + b
+ * @note Result has reference count of 1
+ */
 DC_DEC dc_complex_int dc_int_add(dc_complex_int a, dc_complex_int b);
+
+/**
+ * @brief Subtract two Gaussian integers
+ * @param a First operand (must not be NULL)
+ * @param b Second operand (must not be NULL)
+ * @return New complex number a - b
+ * @note Result has reference count of 1
+ */
 DC_DEC dc_complex_int dc_int_sub(dc_complex_int a, dc_complex_int b);
+
+/**
+ * @brief Multiply two Gaussian integers
+ * @param a First operand (must not be NULL)
+ * @param b Second operand (must not be NULL)
+ * @return New complex number a * b
+ * @note Result has reference count of 1
+ * @note Uses formula: (a+bi)(c+di) = (ac-bd) + (ad+bc)i
+ */
 DC_DEC dc_complex_int dc_int_mul(dc_complex_int a, dc_complex_int b);
-DC_DEC dc_complex_frac dc_int_div(dc_complex_int a, dc_complex_int b);  // Returns fraction!
+
+/**
+ * @brief Divide two Gaussian integers (returns exact rational result)
+ * @param a Dividend (must not be NULL)
+ * @param b Divisor (must not be NULL and not zero)
+ * @return New rational complex number a / b
+ * @note Returns dc_complex_frac for exact division
+ * @note Result has reference count of 1
+ * @note Use dc_frac_is_gaussian_int() to check if result is still integer
+ */
+DC_DEC dc_complex_frac dc_int_div(dc_complex_int a, dc_complex_int b);
+
+/**
+ * @brief Negate a Gaussian integer
+ * @param c The operand (must not be NULL)
+ * @return New complex number -c
+ * @note Result has reference count of 1
+ */
 DC_DEC dc_complex_int dc_int_negate(dc_complex_int c);
+
+/**
+ * @brief Complex conjugate of a Gaussian integer
+ * @param c The operand (must not be NULL)
+ * @return New complex number with imaginary part negated
+ * @note Result has reference count of 1
+ * @note For a+bi, returns a-bi
+ */
 DC_DEC dc_complex_int dc_int_conj(dc_complex_int c);
 
 /* Accessors */
+
+/**
+ * @brief Get the real part of a Gaussian integer
+ * @param c The complex number (must not be NULL)
+ * @return New dynamic integer (must be released)
+ * @note Result has reference count of 1
+ */
 DC_DEC di_int dc_int_real(dc_complex_int c);
+
+/**
+ * @brief Get the imaginary part of a Gaussian integer
+ * @param c The complex number (must not be NULL)
+ * @return New dynamic integer (must be released)
+ * @note Result has reference count of 1
+ */
 DC_DEC di_int dc_int_imag(dc_complex_int c);
 
 /* Comparisons */
+
+/**
+ * @brief Test if two Gaussian integers are equal
+ * @param a First operand (must not be NULL)
+ * @param b Second operand (must not be NULL)
+ * @return true if a == b, false otherwise
+ */
 DC_DEC bool dc_int_eq(dc_complex_int a, dc_complex_int b);
+
+/**
+ * @brief Test if a Gaussian integer is zero
+ * @param c The complex number (must not be NULL)
+ * @return true if c == 0+0i, false otherwise
+ */
 DC_DEC bool dc_int_is_zero(dc_complex_int c);
+
+/**
+ * @brief Test if a Gaussian integer is real (imaginary part is zero)
+ * @param c The complex number (must not be NULL)
+ * @return true if imaginary part is zero, false otherwise
+ */
 DC_DEC bool dc_int_is_real(dc_complex_int c);
+
+/**
+ * @brief Test if a Gaussian integer is purely imaginary (real part is zero)
+ * @param c The complex number (must not be NULL)
+ * @return true if real part is zero, false otherwise
+ */
 DC_DEC bool dc_int_is_imag(dc_complex_int c);
 
 /* String conversion */
+
+/**
+ * @brief Convert Gaussian integer to mathematical string representation
+ * @param c The complex number (must not be NULL)
+ * @return Newly allocated string (must be freed with free())
+ * @note Format examples: "3+4i", "2-3i", "i", "-i", "5", "0"
+ * @note Uses mathematical notation with 'i' for imaginary unit
+ */
 DC_DEC char* dc_int_to_string(dc_complex_int c);
 
 /** @} */
@@ -232,41 +398,231 @@ DC_DEC char* dc_int_to_string(dc_complex_int c);
  */
 
 /* Creation */
+
+/**
+ * @brief Create a rational complex number from integer components
+ * @param real_num Numerator of real part
+ * @param real_den Denominator of real part (must not be zero)
+ * @param imag_num Numerator of imaginary part
+ * @param imag_den Denominator of imaginary part (must not be zero)
+ * @return New rational complex number (must be released)
+ * @note Result has reference count of 1
+ * @note Automatically reduced to lowest terms
+ * @note Denominators normalized to be positive
+ */
 DC_DEC dc_complex_frac dc_frac_from_ints(int64_t real_num, int64_t real_den,
                                           int64_t imag_num, int64_t imag_den);
+
+/**
+ * @brief Create a rational complex number from fraction components
+ * @param real The real part (must not be NULL)
+ * @param imag The imaginary part (must not be NULL)
+ * @return New rational complex number (must be released)
+ * @note Result has reference count of 1
+ * @note Input fractions are retained
+ */
 DC_DEC dc_complex_frac dc_frac_from_df(df_frac real, df_frac imag);
+
+/**
+ * @brief Get the rational complex zero (0/1 + 0/1 i)
+ * @return Singleton zero complex number
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_frac dc_frac_zero(void);
+
+/**
+ * @brief Get the rational complex one (1/1 + 0/1 i)
+ * @return Singleton one complex number
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_frac dc_frac_one(void);
+
+/**
+ * @brief Get the rational complex i (0/1 + 1/1 i)
+ * @return Singleton imaginary unit
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_frac dc_frac_i(void);
+
+/**
+ * @brief Get the rational complex -1 (-1/1 + 0/1 i)
+ * @return Singleton negative one complex number
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_frac dc_frac_neg_one(void);
+
+/**
+ * @brief Get the rational complex -i (0/1 + -1/1 i)
+ * @return Singleton negative imaginary unit
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_frac dc_frac_neg_i(void);
 
 /* Memory management */
+
+/**
+ * @brief Increment reference count and return the same object
+ * @param c The complex number to retain (must not be NULL)
+ * @return The same object passed in
+ * @note Increases reference count by 1
+ */
 DC_DEC dc_complex_frac dc_frac_retain(dc_complex_frac c);
+
+/**
+ * @brief Decrement reference count and possibly free memory
+ * @param c Pointer to complex number pointer (gracefully handles NULL)
+ * @note Sets *c to NULL after release
+ * @note Only frees memory when reference count reaches 0
+ * @note Singletons are never freed
+ */
 DC_DEC void dc_frac_release(dc_complex_frac* c);
+
+/**
+ * @brief Create a new copy with reference count 1
+ * @param c The complex number to copy (must not be NULL)
+ * @return New complex number with same value
+ * @note Result has reference count of 1
+ */
 DC_DEC dc_complex_frac dc_frac_copy(dc_complex_frac c);
 
 /* Arithmetic */
+
+/**
+ * @brief Add two rational complex numbers
+ * @param a First operand (must not be NULL)
+ * @param b Second operand (must not be NULL)
+ * @return New complex number a + b
+ * @note Result has reference count of 1
+ * @note Result automatically reduced to lowest terms
+ */
 DC_DEC dc_complex_frac dc_frac_add(dc_complex_frac a, dc_complex_frac b);
+
+/**
+ * @brief Subtract two rational complex numbers
+ * @param a First operand (must not be NULL)
+ * @param b Second operand (must not be NULL)
+ * @return New complex number a - b
+ * @note Result has reference count of 1
+ * @note Result automatically reduced to lowest terms
+ */
 DC_DEC dc_complex_frac dc_frac_sub(dc_complex_frac a, dc_complex_frac b);
+
+/**
+ * @brief Multiply two rational complex numbers
+ * @param a First operand (must not be NULL)
+ * @param b Second operand (must not be NULL)
+ * @return New complex number a * b
+ * @note Result has reference count of 1
+ * @note Result automatically reduced to lowest terms
+ * @note Uses formula: (a+bi)(c+di) = (ac-bd) + (ad+bc)i
+ */
 DC_DEC dc_complex_frac dc_frac_mul(dc_complex_frac a, dc_complex_frac b);
+
+/**
+ * @brief Divide two rational complex numbers
+ * @param a Dividend (must not be NULL)
+ * @param b Divisor (must not be NULL and not zero)
+ * @return New complex number a / b
+ * @note Result has reference count of 1
+ * @note Result automatically reduced to lowest terms
+ * @note Uses formula: (a+bi)/(c+di) = ((ac+bd)+(bc-ad)i)/(c²+d²)
+ */
 DC_DEC dc_complex_frac dc_frac_div(dc_complex_frac a, dc_complex_frac b);
+
+/**
+ * @brief Negate a rational complex number
+ * @param c The operand (must not be NULL)
+ * @return New complex number -c
+ * @note Result has reference count of 1
+ */
 DC_DEC dc_complex_frac dc_frac_negate(dc_complex_frac c);
+
+/**
+ * @brief Complex conjugate of a rational complex number
+ * @param c The operand (must not be NULL)
+ * @return New complex number with imaginary part negated
+ * @note Result has reference count of 1
+ * @note For a+bi, returns a-bi
+ */
 DC_DEC dc_complex_frac dc_frac_conj(dc_complex_frac c);
+
+/**
+ * @brief Reciprocal of a rational complex number
+ * @param c The operand (must not be NULL and not zero)
+ * @return New complex number 1/c
+ * @note Result has reference count of 1
+ * @note Equivalent to dc_frac_div(dc_frac_one(), c)
+ */
 DC_DEC dc_complex_frac dc_frac_reciprocal(dc_complex_frac c);
 
 /* Accessors */
+
+/**
+ * @brief Get the real part of a rational complex number
+ * @param c The complex number (must not be NULL)
+ * @return New dynamic fraction (must be released)
+ * @note Result has reference count of 1
+ */
 DC_DEC df_frac dc_frac_real(dc_complex_frac c);
+
+/**
+ * @brief Get the imaginary part of a rational complex number
+ * @param c The complex number (must not be NULL)
+ * @return New dynamic fraction (must be released)
+ * @note Result has reference count of 1
+ */
 DC_DEC df_frac dc_frac_imag(dc_complex_frac c);
 
 /* Comparisons */
+
+/**
+ * @brief Test if two rational complex numbers are equal
+ * @param a First operand (must not be NULL)
+ * @param b Second operand (must not be NULL)
+ * @return true if a == b, false otherwise
+ * @note Compares reduced forms for exact equality
+ */
 DC_DEC bool dc_frac_eq(dc_complex_frac a, dc_complex_frac b);
+
+/**
+ * @brief Test if a rational complex number is zero
+ * @param c The complex number (must not be NULL)
+ * @return true if c == 0+0i, false otherwise
+ */
 DC_DEC bool dc_frac_is_zero(dc_complex_frac c);
+
+/**
+ * @brief Test if a rational complex number is real (imaginary part is zero)
+ * @param c The complex number (must not be NULL)
+ * @return true if imaginary part is zero, false otherwise
+ */
 DC_DEC bool dc_frac_is_real(dc_complex_frac c);
+
+/**
+ * @brief Test if a rational complex number is purely imaginary (real part is zero)
+ * @param c The complex number (must not be NULL)
+ * @return true if real part is zero, false otherwise
+ */
 DC_DEC bool dc_frac_is_imag(dc_complex_frac c);
+
+/**
+ * @brief Test if a rational complex number is actually a Gaussian integer
+ * @param c The complex number (must not be NULL)
+ * @return true if both real and imaginary parts are integers, false otherwise
+ * @note Useful after dc_int_div() to check if result simplified to integer
+ */
 DC_DEC bool dc_frac_is_gaussian_int(dc_complex_frac c);
 
 /* String conversion */
+
+/**
+ * @brief Convert rational complex number to mathematical string representation
+ * @param c The complex number (must not be NULL)
+ * @return Newly allocated string (must be freed with free())
+ * @note Format examples: "3/4+2/3i", "1/2-1/3i", "2/3i", "-i", "5/7", "0"
+ * @note Uses mathematical notation with 'i' for imaginary unit
+ * @note Shows fractions in reduced form
+ */
 DC_DEC char* dc_frac_to_string(dc_complex_frac c);
 
 /** @} */
@@ -282,54 +638,339 @@ DC_DEC char* dc_frac_to_string(dc_complex_frac c);
  */
 
 /* Creation */
+
+/**
+ * @brief Create a floating-point complex number from real and imaginary parts
+ * @param real The real part
+ * @param imag The imaginary part
+ * @return New floating-point complex number (must be released)
+ * @note Result has reference count of 1
+ */
 DC_DEC dc_complex_double dc_double_from_doubles(double real, double imag);
+
+/**
+ * @brief Create a floating-point complex number from polar coordinates
+ * @param magnitude The magnitude (radius)
+ * @param angle The angle in radians
+ * @return New floating-point complex number (must be released)
+ * @note Result has reference count of 1
+ * @note Uses formula: magnitude * e^(i*angle)
+ */
 DC_DEC dc_complex_double dc_double_from_polar(double magnitude, double angle);
+
+/**
+ * @brief Get the floating-point complex zero (0.0 + 0.0i)
+ * @return Singleton zero complex number
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_double dc_double_zero(void);
+
+/**
+ * @brief Get the floating-point complex one (1.0 + 0.0i)
+ * @return Singleton one complex number
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_double dc_double_one(void);
+
+/**
+ * @brief Get the floating-point complex i (0.0 + 1.0i)
+ * @return Singleton imaginary unit
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_double dc_double_i(void);
+
+/**
+ * @brief Get the floating-point complex -1 (-1.0 + 0.0i)
+ * @return Singleton negative one complex number
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_double dc_double_neg_one(void);
+
+/**
+ * @brief Get the floating-point complex -i (0.0 + -1.0i)
+ * @return Singleton negative imaginary unit
+ * @note This is a singleton with high reference count
+ */
 DC_DEC dc_complex_double dc_double_neg_i(void);
 
 /* Memory management */
+
+/**
+ * @brief Increment reference count and return the same object
+ * @param c The complex number to retain (must not be NULL)
+ * @return The same object passed in
+ * @note Increases reference count by 1
+ */
 DC_DEC dc_complex_double dc_double_retain(dc_complex_double c);
+
+/**
+ * @brief Decrement reference count and possibly free memory
+ * @param c Pointer to complex number pointer (gracefully handles NULL)
+ * @note Sets *c to NULL after release
+ * @note Only frees memory when reference count reaches 0
+ * @note Singletons are never freed
+ */
 DC_DEC void dc_double_release(dc_complex_double* c);
+
+/**
+ * @brief Create a new copy with reference count 1
+ * @param c The complex number to copy (must not be NULL)
+ * @return New complex number with same value
+ * @note Result has reference count of 1
+ */
 DC_DEC dc_complex_double dc_double_copy(dc_complex_double c);
 
 /* Arithmetic */
+
+/**
+ * @brief Add two floating-point complex numbers
+ * @param a First operand (must not be NULL)
+ * @param b Second operand (must not be NULL)
+ * @return New complex number a + b
+ * @note Result has reference count of 1
+ * @note Uses IEEE 754 floating-point arithmetic
+ */
 DC_DEC dc_complex_double dc_double_add(dc_complex_double a, dc_complex_double b);
+
+/**
+ * @brief Subtract two floating-point complex numbers
+ * @param a First operand (must not be NULL)
+ * @param b Second operand (must not be NULL)
+ * @return New complex number a - b
+ * @note Result has reference count of 1
+ * @note Uses IEEE 754 floating-point arithmetic
+ */
 DC_DEC dc_complex_double dc_double_sub(dc_complex_double a, dc_complex_double b);
+
+/**
+ * @brief Multiply two floating-point complex numbers
+ * @param a First operand (must not be NULL)
+ * @param b Second operand (must not be NULL)
+ * @return New complex number a * b
+ * @note Result has reference count of 1
+ * @note Uses C99 complex.h multiplication
+ */
 DC_DEC dc_complex_double dc_double_mul(dc_complex_double a, dc_complex_double b);
+
+/**
+ * @brief Divide two floating-point complex numbers
+ * @param a Dividend (must not be NULL)
+ * @param b Divisor (must not be NULL and not zero)
+ * @return New complex number a / b
+ * @note Result has reference count of 1
+ * @note Uses C99 complex.h division
+ */
 DC_DEC dc_complex_double dc_double_div(dc_complex_double a, dc_complex_double b);
+
+/**
+ * @brief Negate a floating-point complex number
+ * @param c The operand (must not be NULL)
+ * @return New complex number -c
+ * @note Result has reference count of 1
+ */
 DC_DEC dc_complex_double dc_double_negate(dc_complex_double c);
+
+/**
+ * @brief Complex conjugate of a floating-point complex number
+ * @param c The operand (must not be NULL)
+ * @return New complex number with imaginary part negated
+ * @note Result has reference count of 1
+ * @note For a+bi, returns a-bi
+ * @note Uses C99 complex.h conj() function
+ */
 DC_DEC dc_complex_double dc_double_conj(dc_complex_double c);
 
 /* Complex-specific operations */
+
+/**
+ * @brief Complex exponential function
+ * @param c The operand (must not be NULL)
+ * @return New complex number e^c
+ * @note Result has reference count of 1
+ * @note Uses C99 complex.h cexp() function
+ */
 DC_DEC dc_complex_double dc_double_exp(dc_complex_double c);
+
+/**
+ * @brief Complex natural logarithm
+ * @param c The operand (must not be NULL and not zero)
+ * @return New complex number log(c)
+ * @note Result has reference count of 1
+ * @note Uses C99 complex.h clog() function
+ * @note Principal branch of logarithm
+ */
 DC_DEC dc_complex_double dc_double_log(dc_complex_double c);
+
+/**
+ * @brief Complex power function
+ * @param a Base (must not be NULL)
+ * @param b Exponent (must not be NULL)
+ * @return New complex number a^b
+ * @note Result has reference count of 1
+ * @note Uses C99 complex.h cpow() function
+ * @note Principal branch for multi-valued functions
+ */
 DC_DEC dc_complex_double dc_double_pow(dc_complex_double a, dc_complex_double b);
+
+/**
+ * @brief Complex square root
+ * @param c The operand (must not be NULL)
+ * @return New complex number sqrt(c)
+ * @note Result has reference count of 1
+ * @note Uses C99 complex.h csqrt() function
+ * @note Principal branch with Re(sqrt(c)) >= 0
+ */
 DC_DEC dc_complex_double dc_double_sqrt(dc_complex_double c);
+
+/**
+ * @brief Complex sine function
+ * @param c The operand (must not be NULL)
+ * @return New complex number sin(c)
+ * @note Result has reference count of 1
+ * @note Uses C99 complex.h csin() function
+ */
 DC_DEC dc_complex_double dc_double_sin(dc_complex_double c);
+
+/**
+ * @brief Complex cosine function
+ * @param c The operand (must not be NULL)
+ * @return New complex number cos(c)
+ * @note Result has reference count of 1
+ * @note Uses C99 complex.h ccos() function
+ */
 DC_DEC dc_complex_double dc_double_cos(dc_complex_double c);
+
+/**
+ * @brief Complex tangent function
+ * @param c The operand (must not be NULL)
+ * @return New complex number tan(c)
+ * @note Result has reference count of 1
+ * @note Uses C99 complex.h ctan() function
+ */
 DC_DEC dc_complex_double dc_double_tan(dc_complex_double c);
+
+/**
+ * @brief Complex hyperbolic sine function
+ * @param c The operand (must not be NULL)
+ * @return New complex number sinh(c)
+ * @note Result has reference count of 1
+ * @note Uses C99 complex.h csinh() function
+ */
 DC_DEC dc_complex_double dc_double_sinh(dc_complex_double c);
+
+/**
+ * @brief Complex hyperbolic cosine function
+ * @param c The operand (must not be NULL)
+ * @return New complex number cosh(c)
+ * @note Result has reference count of 1
+ * @note Uses C99 complex.h ccosh() function
+ */
 DC_DEC dc_complex_double dc_double_cosh(dc_complex_double c);
+
+/**
+ * @brief Complex hyperbolic tangent function
+ * @param c The operand (must not be NULL)
+ * @return New complex number tanh(c)
+ * @note Result has reference count of 1
+ * @note Uses C99 complex.h ctanh() function
+ */
 DC_DEC dc_complex_double dc_double_tanh(dc_complex_double c);
 
 /* Accessors */
+
+/**
+ * @brief Get the real part of a floating-point complex number
+ * @param c The complex number (must not be NULL)
+ * @return The real part as a double
+ * @note Uses C99 complex.h creal() function
+ */
 DC_DEC double dc_double_real(dc_complex_double c);
+
+/**
+ * @brief Get the imaginary part of a floating-point complex number
+ * @param c The complex number (must not be NULL)
+ * @return The imaginary part as a double
+ * @note Uses C99 complex.h cimag() function
+ */
 DC_DEC double dc_double_imag(dc_complex_double c);
+
+/**
+ * @brief Get the absolute value (magnitude) of a complex number
+ * @param c The complex number (must not be NULL)
+ * @return The magnitude as a double
+ * @note Uses C99 complex.h cabs() function
+ * @note Returns sqrt(real² + imag²)
+ */
 DC_DEC double dc_double_abs(dc_complex_double c);
+
+/**
+ * @brief Get the argument (phase angle) of a complex number
+ * @param c The complex number (must not be NULL)
+ * @return The angle in radians (-π to π)
+ * @note Uses C99 complex.h carg() function
+ * @note Returns atan2(imag, real)
+ */
 DC_DEC double dc_double_arg(dc_complex_double c);
 
 /* Comparisons */
+
+/**
+ * @brief Test if two floating-point complex numbers are equal
+ * @param a First operand (must not be NULL)
+ * @param b Second operand (must not be NULL)
+ * @return true if a == b (exact equality), false otherwise
+ * @note Uses exact floating-point comparison
+ * @note Consider using epsilon comparison for numerical stability
+ */
 DC_DEC bool dc_double_eq(dc_complex_double a, dc_complex_double b);
+
+/**
+ * @brief Test if a floating-point complex number is zero
+ * @param c The complex number (must not be NULL)
+ * @return true if c == 0.0+0.0i, false otherwise
+ */
 DC_DEC bool dc_double_is_zero(dc_complex_double c);
+
+/**
+ * @brief Test if a floating-point complex number is real (imaginary part is zero)
+ * @param c The complex number (must not be NULL)
+ * @return true if imaginary part is 0.0, false otherwise
+ */
 DC_DEC bool dc_double_is_real(dc_complex_double c);
+
+/**
+ * @brief Test if a floating-point complex number is purely imaginary (real part is zero)
+ * @param c The complex number (must not be NULL)
+ * @return true if real part is 0.0, false otherwise
+ */
 DC_DEC bool dc_double_is_imag(dc_complex_double c);
+
+/**
+ * @brief Test if a floating-point complex number contains NaN
+ * @param c The complex number (must not be NULL)
+ * @return true if either component is NaN, false otherwise
+ * @note Uses isnan() for both real and imaginary parts
+ */
 DC_DEC bool dc_double_is_nan(dc_complex_double c);
+
+/**
+ * @brief Test if a floating-point complex number contains infinity
+ * @param c The complex number (must not be NULL)
+ * @return true if either component is infinite, false otherwise
+ * @note Uses isinf() for both real and imaginary parts
+ */
 DC_DEC bool dc_double_is_inf(dc_complex_double c);
 
 /* String conversion */
+
+/**
+ * @brief Convert floating-point complex number to mathematical string representation
+ * @param c The complex number (must not be NULL)
+ * @return Newly allocated string (must be freed with free())
+ * @note Format examples: "3.14+2.71i", "1.5-2.3i", "2.71i", "-i", "3.14", "0"
+ * @note Uses mathematical notation with 'i' for imaginary unit
+ * @note Uses %g format for compact representation
+ */
 DC_DEC char* dc_double_to_string(dc_complex_double c);
 
 /** @} */
@@ -345,13 +986,65 @@ DC_DEC char* dc_double_to_string(dc_complex_double c);
  */
 
 /* Upward conversions (lossless) */
+
+/**
+ * @brief Convert Gaussian integer to rational complex (lossless)
+ * @param c The Gaussian integer (must not be NULL)
+ * @return New rational complex number with same value
+ * @note Result has reference count of 1
+ * @note Conversion is exact: integer n becomes n/1
+ */
 DC_DEC dc_complex_frac dc_int_to_frac(dc_complex_int c);
+
+/**
+ * @brief Convert Gaussian integer to floating-point complex (lossless for small integers)
+ * @param c The Gaussian integer (must not be NULL)
+ * @return New floating-point complex number
+ * @note Result has reference count of 1
+ * @note Large integers may lose precision due to double limits
+ */
 DC_DEC dc_complex_double dc_int_to_double(dc_complex_int c);
+
+/**
+ * @brief Convert rational complex to floating-point complex
+ * @param c The rational complex number (must not be NULL)
+ * @return New floating-point complex number
+ * @note Result has reference count of 1
+ * @note Precision may be lost due to floating-point representation
+ */
 DC_DEC dc_complex_double dc_frac_to_double(dc_complex_frac c);
 
 /* Downward conversions (may round) */
+
+/**
+ * @brief Convert rational complex to Gaussian integer (with rounding)
+ * @param c The rational complex number (must not be NULL)
+ * @return New Gaussian integer (rounded to nearest)
+ * @note Result has reference count of 1
+ * @note Both real and imaginary parts rounded to nearest integer
+ * @note Use dc_frac_is_gaussian_int() to check if conversion is exact
+ */
 DC_DEC dc_complex_int dc_frac_to_int(dc_complex_frac c);
+
+/**
+ * @brief Convert floating-point complex to Gaussian integer (with rounding)
+ * @param c The floating-point complex number (must not be NULL)
+ * @return New Gaussian integer (rounded to nearest)
+ * @note Result has reference count of 1
+ * @note Both real and imaginary parts rounded to nearest integer
+ * @note NaN and infinity values may produce undefined behavior
+ */
 DC_DEC dc_complex_int dc_double_to_int(dc_complex_double c);
+
+/**
+ * @brief Convert floating-point complex to rational complex (with approximation)
+ * @param c The floating-point complex number (must not be NULL)
+ * @param max_denominator Maximum allowed denominator for approximation
+ * @return New rational complex number approximating the input
+ * @note Result has reference count of 1
+ * @note Uses continued fraction approximation
+ * @note Larger max_denominator gives better approximation but larger fractions
+ */
 DC_DEC dc_complex_frac dc_double_to_frac(dc_complex_double c, int64_t max_denominator);
 
 /** @} */

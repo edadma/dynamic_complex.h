@@ -1,6 +1,6 @@
 # dynamic_complex.h
 
-[![Version](https://img.shields.io/badge/version-v1.0.0-blue.svg)](https://github.com/edadma/dynamic_complex.h/releases)
+[![Version](https://img.shields.io/badge/version-v0.1.0-blue.svg)](https://github.com/edadma/dynamic_complex.h/releases)
 [![Language](https://img.shields.io/badge/language-C11-blue.svg)](https://en.cppreference.com/w/c/11)
 [![License](https://img.shields.io/badge/license-MIT%20OR%20Unlicense-green.svg)](#license)
 [![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows%20%7C%20macOS%20%7C%20MCU-lightgrey.svg)](#platform-support)
@@ -228,6 +228,5 @@ Choose the license that best fits your project's needs.
 
 This library follows strict design principles:
 - Fail-fast error handling
-- No AI attribution in commits
 - Comprehensive testing required
 - Mathematical correctness over convenience
