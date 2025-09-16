@@ -4,7 +4,7 @@
 [![Language](https://img.shields.io/badge/language-C11-blue.svg)](https://en.cppreference.com/w/c/11)
 [![License](https://img.shields.io/badge/license-MIT%20OR%20Unlicense-green.svg)](#license)
 [![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows%20%7C%20macOS%20%7C%20MCU-lightgrey.svg)](#platform-support)
-[![Tests](https://img.shields.io/badge/tests-14%20passing-brightgreen.svg)](#testing)
+[![Tests](https://img.shields.io/badge/tests-25%20passing-brightgreen.svg)](#testing)
 
 A single-header C library implementing arbitrary precision complex numbers with reference counting. Supports three distinct complex number types: integer (Gaussian), rational, and floating-point complexes.
 
@@ -19,7 +19,7 @@ A single-header C library implementing arbitrary precision complex numbers with 
 - **C99 Complex Integration**: Full transcendental function support for floating-point complex
 - **Mathematical String Format**: Clean output like "3+4i", "2-3i", "i", "-i"
 - **Fail-Fast Error Handling**: Assertions on invalid inputs for immediate bug detection
-- **Comprehensive Testing**: 14 test cases covering all functionality
+- **Comprehensive Testing**: 25 test cases with 100% function coverage
 
 ## Quick Start
 
@@ -162,8 +162,29 @@ make
 # Run tests
 ./tests
 
-# All 14 tests should pass
+# All 25 tests should pass with 100% function coverage
 ```
+
+### Test Organization
+
+The test suite is organized into logical groups:
+
+1. **Integer Complex Tests** (6 test functions)
+   - Basic functionality, arithmetic, memory management, missing functions coverage
+
+2. **Rational Complex Tests** (7 test functions)
+   - Creation, arithmetic, memory management, comparisons, string formatting
+
+3. **Floating-Point Complex Tests** (8 test functions)
+   - Creation, arithmetic, transcendentals, special values, comprehensive coverage
+
+4. **Type Conversion Tests** (2 test functions)
+   - All conversion paths between the three types
+
+5. **Edge Cases and Formatting** (2 test functions)
+   - Mathematical identities, string formatting, boundary conditions
+
+Each test function thoroughly exercises multiple related functions to ensure complete coverage and mathematical correctness.
 
 ## Integration with Interpreters
 
@@ -208,13 +229,43 @@ The library uses a **fail-fast** approach:
 
 ## Testing
 
-Comprehensive test suite with 14 test cases:
-- Integer complex creation and arithmetic
-- Rational complex with Gaussian integer detection
-- Floating-point complex with transcendental functions
-- Type conversions between all three types
-- Memory management and reference counting
-- String formatting and edge cases
+Comprehensive test suite with 25 test cases achieving **100% function coverage**:
+
+### Integer Complex Tests (dc_int_*)
+- Creation functions (`dc_int_from_ints`, `dc_int_from_di`, constants)
+- Complete arithmetic operations (add, sub, mul, div, negate, conjugate)
+- Memory management (retain, release, copy)
+- Comparison predicates and string formatting
+- Edge cases and mathematical identities
+
+### Rational Complex Tests (dc_frac_*)
+- Creation from integers and fractions (`dc_frac_from_ints`, `dc_frac_from_df`)
+- Complete arithmetic suite (add, sub, mul, div, negate, conjugate, reciprocal)
+- Gaussian integer detection predicate
+- Memory management and equality testing
+- String representation with fraction notation
+
+### Floating-Point Complex Tests (dc_double_*)
+- Creation from Cartesian and polar coordinates
+- Basic and complete arithmetic operations
+- **Full transcendental function suite**: exp, log, pow, sqrt, sin, cos, tan, sinh, cosh, tanh
+- Special value detection (NaN, infinity)
+- Memory management and string formatting
+- Mathematical identity verification (e^(iπ/2) = i, sqrt(-1) = i)
+
+### Type Conversion Tests
+- Lossless upward conversions (int→frac→double)
+- Lossy downward conversions with rounding
+- Exact and approximate fraction conversion from doubles
+- Conversion accuracy validation
+
+### Comprehensive Coverage
+- **All 65+ functions tested** across three complex types
+- Memory management (reference counting, retain/release, copy)
+- Mathematical correctness validation
+- String formatting for all representations
+- Edge cases, special values, and error conditions
+- Cross-type operations and conversions
 
 ## License
 
