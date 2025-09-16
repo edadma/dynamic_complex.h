@@ -1,0 +1,265 @@
+# =============================================================================
+# Dynamic Complex Library - .gitignore
+# =============================================================================
+
+# Build directories
+build/
+cmake-build-*/
+out/
+bin/
+obj/
+
+# Generated documentation
+docs/
+doxygen_warnings.log
+
+# Compiled object files
+*.o
+*.obj
+*.lo
+*.slo
+*.ko
+
+# Compiled dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled static libraries
+*.a
+*.lib
+*.lai
+*.la
+
+# Executables
+*.exe
+*.out
+*.app
+tests
+test_runner
+example
+debug_test
+dynamic_complex_h
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+*.cmake
+!CMakeLists.txt
+
+# Testing and coverage
+*.gcov
+*.gcno
+*.gcda
+coverage.info
+coverage/
+lcov.info
+
+# IDE and editor files
+# Visual Studio Code
+.vscode/
+*.code-workspace
+
+# CLion / IntelliJ
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Visual Studio
+.vs/
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+*.suo
+*.user
+*.ncb
+*.aps
+*.pdb
+*.ilk
+*.meta
+*.tlog/
+*.log
+*.pch
+*.exp
+*.idb
+*.res
+*.tmp
+*.tmp_proj
+*.vspscc
+*.vssscc
+.builds/
+*.pidb
+*.svclog
+*.scc
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+xcuserdata/
+DerivedData/
+
+# Eclipse CDT
+.cproject
+.project
+.metadata/
+.settings/
+
+# Code::Blocks
+*.cbp
+*.depend
+*.layout
+
+# Dev-C++
+*.dev
+
+# KDevelop
+*.kdev4
+.kdev4/
+
+# Qt Creator
+*.pro.user
+*.pro.user.*
+*.qbs.user
+*.qbs.user.*
+*.moc
+*.moc.cpp
+*.qm
+*.prl
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+*.bak
+*.orig
+*.autosave
+
+# OS generated files
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+*.lnk
+desktop.ini
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Package managers and dependencies
+# Conan
+conaninfo.txt
+conanbuildinfo.cmake
+conandata.yml
+.conan/
+
+# vcpkg
+vcpkg_installed/
+.vcpkg-root
+
+# CPM
+.cpm/
+
+# Logs and debug files
+*.log
+gdb.txt
+valgrind.log
+*.stackdump
+
+# Profiling data
+gmon.out
+*.prof
+callgrind.out.*
+cachegrind.out.*
+massif.out.*
+*.dSYM/
+
+# Address sanitizer
+*.asan
+
+# Static analysis
+.clang_complete
+.ycm_extra_conf.py*
+compile_commands.json
+
+# Backup files from patches
+*.orig
+*.rej
+
+# Archives and packages
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Local configuration files
+local_config.h
+config_local.h
+
+# Generated version files
+version.h
+build_info.h
+
+# Doxygen generated files (in case not in docs/)
+html/
+latex/
+man/
+xml/
+*.tag
+
+# Unity test framework (already in devDeps, but ignore if copied elsewhere)
+unity.c
+unity.h
+unity_internals.h
+
+# Custom debug/test executables
+test_*
+debug_*
+benchmark_*
+example_*
+
+# Temporary test files
+test_output.txt
+test_results.*
+
+# Ignore compiled test binaries but keep source
+*_test
+*_tests
+*_benchmark
+
+# Local development files
+TODO.local
+NOTES.local
+.env.local
+CLAUDE.md
+.claude/
+
+# Doxygen backup files
+Doxyfile.bak
+
+# Test files (keep main.c but ignore debug/temp test files)
+debug_test.c
+test_new_functions.c
+
+# Backup files
+*.bak
