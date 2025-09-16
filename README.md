@@ -309,6 +309,40 @@ Comprehensive test suite with 25 test cases achieving **100% function coverage**
 - Edge cases, special values, and error conditions
 - Cross-type operations and conversions
 
+## Version History
+
+### v0.1.0 (2025-09-16) - Initial Release
+
+**Features:**
+- Three distinct complex number types:
+  - Gaussian integers (`dc_complex_int`) - arbitrary precision integer complex
+  - Rational complex (`dc_complex_frac`) - exact fraction arithmetic
+  - Floating-point complex (`dc_complex_double`) - IEEE 754 with transcendentals
+- Complete arithmetic operations for all types
+- Full C99 complex.h transcendental function support
+- Type conversions between all three types
+- Reference counting memory management with optional atomic operations
+- Mathematical string formatting ("3+4i", "1/2+3/4i")
+- Fail-fast error handling with descriptive assertions
+
+**API:**
+- 65+ functions across three complete APIs (`dc_int_*`, `dc_frac_*`, `dc_double_*`)
+- Separate function families for clean interpreter integration
+- Lossless upward conversions, rounding downward conversions
+- Gaussian integer division returns exact rational results
+
+**Quality:**
+- 100% function coverage with 25 comprehensive test cases
+- Mathematical correctness validation
+- Complete Doxygen documentation
+- Cross-platform support (Linux, Windows, macOS, embedded)
+- Single-header library design
+
+**Dependencies:**
+- Requires `dynamic_int.h` and `dynamic_fraction.h`
+- Uses C99 `complex.h` for transcendental functions
+- CMake build system with flexible dependency management
+
 ## License
 
 Dual licensed under your choice of:
